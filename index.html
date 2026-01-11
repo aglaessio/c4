@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamento Citroën C4 Picasso 2010/2011</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #003b5c 0%, #005b8a 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .car-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .car-icon {
+            font-size: 2rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            min-width: 250px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #003b5c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #005b8a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .sections-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1300px) {
+            .sections-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #003b5c;
+        }
+
+        .section-header h2 {
+            color: #003b5c;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.3rem;
+        }
+
+        .section-total {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #003b5c;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .items-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .items-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .item-name {
+            font-weight: 500;
+            width: 40%;
+        }
+
+        .item-quantity, .item-unit, .item-total {
+            width: 15%;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #003b5c;
+            box-shadow: 0 0 0 2px rgba(0,59,92,0.25);
+        }
+
+        .edit-btn, .delete-btn, .save-btn, .cancel-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0 2px;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .edit-btn:hover {
+            background: #e0a800;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .save-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #218838;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background: #5a6268;
+        }
+
+        .add-item-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #dee2e6;
+            flex-wrap: wrap;
+        }
+
+        .add-item-row input {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .add-item-btn {
+            background: #003b5c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .add-item-btn:hover {
+            background: #005b8a;
+        }
+
+        .summary-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .summary-header {
+            color: #003b5c;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #003b5c;
+        }
+
+        .summary-card h3 {
+            color: #003b5c;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #003b5c;
+        }
+
+        .summary-minmax {
+            display: flex;
+            justify-content: space-between;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .grand-total {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #003b5c 0%, #005b8a 100%);
+            color: white;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .grand-total h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .grand-total-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .grand-total-range {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .export-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 30px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            color: #003b5c;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-car"></i> Orçamento Citroën C4 Picasso</h1>
+            <div class="car-info">
+                <div class="car-icon">🚗</div>
+                <div>
+                    <h2>Modelo: Citroën C4 Picasso 2010/2011 2.0 Automático Gasolina</h2>
+                    <p>Use esta ferramenta para comparar preços e gerenciar seu orçamento</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="search-filter">
+                <input type="text" id="search" class="search-box" placeholder="🔍 Buscar peça...">
+                <select id="filter" class="filter-select">
+                    <option value="all">Todos os sistemas</option>
+                    <option value="motor">Motor</option>
+                    <option value="suspensao">Suspensão</option>
+                    <option value="freios">Freios</option>
+                    <option value="transmissao">Transmissão</option>
+                    <option value="eletrica">Elétrica</option>
+                    <option value="diversos">Diversos</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="resetBudget()">
+                    <i class="fas fa-undo"></i> Restaurar
+                </button>
+                <button class="btn btn-primary" onclick="saveBudget()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+        </div>
+
+        <div class="sections-container" id="sectionsContainer">
+            <!-- Sections will be dynamically loaded here -->
+        </div>
+
+        <div class="summary-panel">
+            <h2 class="summary-header">📊 Resumo do Orçamento</h2>
+            <div class="summary-grid" id="summaryGrid">
+                <!-- Summary will be dynamically loaded here -->
+            </div>
+            <div class="grand-total">
+                <h2>Valor Total Estimado (Apenas Peças)</h2>
+                <div class="grand-total-amount" id="grandTotal">R$ 0,00</div>
+                <div class="grand-total-range" id="totalRange">Faixa: R$ 0,00 - R$ 0,00</div>
+                <p style="margin-top: 10px; font-size: 0.9rem;">* Valores estimados sem mão de obra</p>
+            </div>
+        </div>
+
+        <div class="export-buttons">
+            <button class="btn btn-success" onclick="exportToPDF()">
+                <i class="fas fa-file-pdf"></i> Exportar PDF
+            </button>
+            <button class="btn btn-primary" onclick="printBudget()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+            <button class="btn btn-secondary" onclick="shareBudget()">
+                <i class="fas fa-share-alt"></i> Compartilhar
+            </button>
+        </div>
+
+        <footer>
+            <p>Orçamento gerado para Citroën C4 Picasso 2010/2011 2.0 Automático Gasolina</p>
+            <p>Atualização automática conforme edições • Dados salvos localmente</p>
+        </footer>
+    </div>
+
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-question-circle"></i> Como usar</h2>
+            <p>1. <strong>Editar valores:</strong> Clique no botão "Editar" em qualquer item</p>
+            <p>2. <strong>Adicionar itens:</strong> Use o formulário no final de cada seção</p>
+            <p>3. <strong>Remover itens:</strong> Clique no botão "Excluir"</p>
+            <p>4. <strong>Buscar:</strong> Use a barra de busca para encontrar peças específicas</p>
+            <p>5. <strong>Filtrar:</strong> Use o seletor para ver apenas um sistema</p>
+            <p>6. <strong>Salvar:</strong> Os dados são salvos automaticamente no seu navegador</p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="closeModal()">Entendi!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial budget data
+        const initialBudgetData = {
+            motor: {
+                name: "🔧 Motor e Filtragem",
+                icon: "fas fa-cogs",
+                items: [
+                    { name: "Filtro de Ar do Motor", quantity: 1, unitPrice: 57.50, total: 57.50 },
+                    { name: "Filtro de Óleo", quantity: 1, unitPrice: 42.50, total: 42.50 },
+                    { name: "Filtro de Combustível", quantity: 1, unitPrice: 80.00, total: 80.00 },
+                    { name: "Jogo de Velas de Ignição", quantity: 1, unitPrice: 210.00, total: 210.00 },
+                    { name: "Bomba de Combustível", quantity: 1, unitPrice: 600.00, total: 600.00 },
+                    { name: "Kit Correia Dentada (com bomba d'água)", quantity: 1, unitPrice: 775.00, total: 775.00 }
+                ],
+                min: 1020,
+                max: 2510
+            },
+            suspensao: {
+                name: "🛞 Suspensão e Direção",
+                icon: "fas fa-car-side",
+                items: [
+                    { name: "Amortecedor Dianteiro", quantity: 2, unitPrice: 425.00, total: 850.00 },
+                    { name: "Amortecedor Traseiro", quantity: 2, unitPrice: 325.00, total: 650.00 },
+                    { name: "Bandeja/Braço de Suspensão Dianteiro", quantity: 2, unitPrice: 325.00, total: 650.00 },
+                    { name: "Bieleta da Barra Estabilizadora", quantity: 2, unitPrice: 70.00, total: 140.00 },
+                    { name: "Terminal de Direção", quantity: 2, unitPrice: 120.00, total: 240.00 },
+                    { name: "Braços de Controle", quantity: 2, unitPrice: 290.00, total: 580.00 }
+                ],
+                min: 1900,
+                max: 4360
+            },
+            freios: {
+                name: "🛑 Freios",
+                icon: "fas fa-stop-circle",
+                items: [
+                    { name: "Disco de Freio Dianteiro", quantity: 2, unitPrice: 185.00, total: 370.00 },
+                    { name: "Disco de Freio Traseiro", quantity: 2, unitPrice: 160.00, total: 320.00 },
+                    { name: "Kit Pastilhas Dianteiras", quantity: 1, unitPrice: 140.00, total: 140.00 },
+                    { name: "Kit Pastilhas Traseiras", quantity: 1, unitPrice: 125.00, total: 125.00 },
+                    { name: "Flexível de Freio (cada)", quantity: 4, unitPrice: 55.00, total: 220.00 },
+                    { name: "Pinça de Freio Dianteira (recond.)", quantity: 2, unitPrice: 375.00, total: 750.00 }
+                ],
+                min: 1210,
+                max: 2640
+            },
+            transmissao: {
+                name: "⚙️ Transmissão",
+                icon: "fas fa-cogs",
+                items: [
+                    { name: "Junta Homocinética Externa", quantity: 2, unitPrice: 250.00, total: 500.00 },
+                    { name: "Junta Homocinética Interna", quantity: 2, unitPrice: 290.00, total: 580.00 },
+                    { name: "Semi-eixo Completo (recond.)", quantity: 2, unitPrice: 650.00, total: 1300.00 },
+                    { name: "Rolamento de Roda", quantity: 4, unitPrice: 140.00, total: 560.00 }
+                ],
+                min: 4380,
+                max: 6200
+            },
+            eletrica: {
+                name: "🧰 Sistema Elétrico",
+                icon: "fas fa-bolt",
+                items: [
+                    { name: "Bateria (70Ah)", quantity: 1, unitPrice: 450.00, total: 450.00 },
+                    { name: "Alternador (recondicionado)", quantity: 1, unitPrice: 950.00, total: 950.00 },
+                    { name: "Farol Dianteiro Completo", quantity: 2, unitPrice: 700.00, total: 1400.00 },
+                    { name: "Lanterna Traseira", quantity: 2, unitPrice: 275.00, total: 550.00 },
+                    { name: "Jogo de Fusíveis", quantity: 1, unitPrice: 35.00, total: 35.00 }
+                ],
+                min: 3370,
+                max: 7850
+            },
+            diversos: {
+                name: "🪑 Interior e Exterior",
+                icon: "fas fa-car",
+                items: [
+                    { name: "Filtro de Cabine (Ar-Condicionado)", quantity: 1, unitPrice: 80.00, total: 80.00 },
+                    { name: "Para-brisa", quantity: 1, unitPrice: 1300.00, total: 1300.00 },
+                    { name: "Vidro Lateral", quantity: 1, unitPrice: 375.00, total: 375.00 },
+                    { name: "Retrovisor Lateral Completo", quantity: 1, unitPrice: 350.00, total: 350.00 },
+                    { name: "Pneu Estepe", quantity: 1, unitPrice: 300.00, total: 300.00 }
+                ],
+                min: 1490,
+                max: 3320
+            }
+        };
+
+        let budgetData = JSON.parse(JSON.stringify(initialBudgetData));
+        let editingItem = null;
+
+        // Load saved data from localStorage
+        function loadSavedData() {
+            const saved = localStorage.getItem('citroenBudget');
+            if (saved) {
+                budgetData = JSON.parse(saved);
+            }
+        }
+
+        // Save data to localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('citroenBudget', JSON.stringify(budgetData));
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        // Calculate item total
+        function calculateItemTotal(quantity, unitPrice) {
+            return quantity * unitPrice;
+        }
+
+        // Render all sections
+        function renderSections() {
+            const sectionsContainer = document.getElementById('sectionsContainer');
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const filterValue = document.getElementById('filter').value;
+            
+            sectionsContainer.innerHTML = '';
+            
+            Object.entries(budgetData).forEach(([key, section]) => {
+                // Filter by system
+                if (filterValue !== 'all' && key !== filterValue) return;
+                
+                // Filter items by search term
+                const filteredItems = section.items.filter(item => 
+                    item.name.toLowerCase().includes(searchTerm)
+                );
+                
+                if (filteredItems.length === 0 && searchTerm !== '') return;
+                
+                const sectionTotal = filteredItems.reduce((sum, item) => sum + item.total, 0);
+                
+                const sectionHTML = `
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2><i class="${section.icon} section-icon"></i> ${section.name}</h2>
+                            <div class="section-total">${formatCurrency(sectionTotal)}</div>
+                        </div>
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th class="item-name">Peça/Item</th>
+                                    <th class="item-quantity">Qtd</th>
+                                    <th class="item-unit">Preço Unit.</th>
+                                    <th class="item-total">Total</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filteredItems.map((item, index) => `
+                                    <tr data-section="${key}" data-index="${index}">
+                                        ${editingItem && editingItem.section === key && editingItem.index === index ? 
+                                            `<td><input type="text" value="${item.name}" id="edit-name"></td>
+                                             <td><input type="number" value="${item.quantity}" id="edit-quantity" min="1" step="1"></td>
+                                             <td><input type="number" value="${item.unitPrice}" id="edit-unitPrice" step="0.01" min="0"></td>
+                                             <td>${formatCurrency(item.total)}</td>
+                                             <td>
+                                                 <button class="save-btn" onclick="saveEdit('${key}', ${index})"><i class="fas fa-check"></i></button>
+                                                 <button class="cancel-btn" onclick="cancelEdit()"><i class="fas fa-times"></i></button>
+                                             </td>` :
+                                            `<td class="item-name">${item.name}</td>
+                                             <td class="item-quantity">${item.quantity}</td>
+                                             <td class="item-unit">${formatCurrency(item.unitPrice)}</td>
+                                             <td class="item-total">${formatCurrency(item.total)}</td>
+                                             <td>
+                                                 <button class="edit-btn" onclick="startEdit('${key}', ${index})"><i class="fas fa-edit"></i></button>
+                                                 <button class="delete-btn" onclick="deleteItem('${key}', ${index})"><i class="fas fa-trash"></i></button>
+                                             </td>`
+                                        }
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <div class="add-item-row">
+                            <input type="text" id="new-name-${key}" placeholder="Nome da peça">
+                            <input type="number" id="new-quantity-${key}" placeholder="Qtd" min="1" step="1" value="1">
+                            <input type="number" id="new-unitPrice-${key}" placeholder="Preço unitário" step="0.01" min="0">
+                            <button class="add-item-btn" onclick="addItem('${key}')"><i class="fas fa-plus"></i> Adicionar</button>
+                        </div>
+                    </div>
+                `;
+                
+                sectionsContainer.innerHTML += sectionHTML;
+            });
+            
+            updateSummary();
+        }
+
+        // Update summary panel
+        function updateSummary() {
+            const summaryGrid = document.getElementById('summaryGrid');
+            let totalMin = 0;
+            let totalMax = 0;
+            let totalCurrent = 0;
+            
+            summaryGrid.innerHTML = '';
+            
+            Object.entries(budgetData).forEach(([key, section]) => {
+                const sectionTotal = section.items.reduce((sum, item) => sum + item.total, 0);
+                totalCurrent += sectionTotal;
+                totalMin += section.min;
+                totalMax += section.max;
+                
+                const summaryHTML = `
+                    <div class="summary-card">
+                        <h3><i class="${section.icon}"></i> ${section.name.split(' ')[0]}</h3>
+                        <div class="summary-total">${formatCurrency(sectionTotal)}</div>
+                        <div class="summary-minmax">
+                            <span>Mín: ${formatCurrency(section.min)}</span>
+                            <span>Máx: ${formatCurrency(section.max)}</span>
+                        </div>
+                    </div>
+                `;
+                
+                summaryGrid.innerHTML += summaryHTML;
+            });
+            
+            document.getElementById('grandTotal').textContent = formatCurrency(totalCurrent);
+            document.getElementById('totalRange').textContent = `Faixa: ${formatCurrency(totalMin)} - ${formatCurrency(totalMax)}`;
+        }
+
+        // Start editing an item
+        function startEdit(section, index) {
+            editingItem = { section, index };
+            renderSections();
+            
+            // Focus on the name field
+            setTimeout(() => {
+                const nameInput = document.getElementById('edit-name');
+                if (nameInput) nameInput.focus();
+            }, 100);
+        }
+
+        // Save edited item
+        function saveEdit(section, index) {
+            const name = document.getElementById('edit-name').value;
+            const quantity = parseFloat(document.getElementById('edit-quantity').value);
+            const unitPrice = parseFloat(document.getElementById('edit-unitPrice').value);
+            
+            if (name && quantity > 0 && unitPrice >= 0) {
+                budgetData[section].items[index] = {
+                    name,
+                    quantity,
+                    unitPrice,
+                    total: calculateItemTotal(quantity, unitPrice)
+                };
+                editingItem = null;
+                saveToLocalStorage();
+                renderSections();
+            } else {
+                alert('Por favor, preencha todos os campos corretamente.');
+            }
+        }
+
+        // Cancel editing
+        function cancelEdit() {
+            editingItem = null;
+            renderSections();
+        }
+
+        // Delete an item
+        function deleteItem(section, index) {
+            if (confirm('Tem certeza que deseja excluir este item?')) {
+                budgetData[section].items.splice(index, 1);
+                saveToLocalStorage();
+                renderSections();
+            }
+        }
+
+        // Add new item
+        function addItem(section) {
+            const nameInput = document.getElementById(`new-name-${section}`);
+            const quantityInput = document.getElementById(`new-quantity-${section}`);
+            const unitPriceInput = document.getElementById(`new-unitPrice-${section}`);
+            
+            const name = nameInput.value.trim();
+            const quantity = parseFloat(quantityInput.value);
+            const unitPrice = parseFloat(unitPriceInput.value);
+            
+            if (name && quantity > 0 && unitPrice >= 0) {
+                budgetData[section].items.push({
+                    name,
+                    quantity,
+                    unitPrice,
+                    total: calculateItemTotal(quantity, unitPrice)
+                });
+                
+                // Clear inputs
+                nameInput.value = '';
+                quantityInput.value = 1;
+                unitPriceInput.value = '';
+                
+                saveToLocalStorage();
+                renderSections();
+                
+                // Focus back on name input
+                nameInput.focus();
+            } else {
+                alert('Por favor, preencha todos os campos corretamente.');
+            }
+        }
+
+        // Reset budget to initial values
+        function resetBudget() {
+            if (confirm('Isso restaurará todos os valores para o orçamento inicial. Deseja continuar?')) {
+                budgetData = JSON.parse(JSON.stringify(initialBudgetData));
+                editingItem = null;
+                saveToLocalStorage();
+                renderSections();
+            }
+        }
+
+        // Save budget
+        function saveBudget() {
+            saveToLocalStorage();
+            alert('Orçamento salvo com sucesso!');
+        }
+
+        // Search functionality
+        document.getElementById('search').addEventListener('input', renderSections);
+        document.getElementById('filter').addEventListener('change', renderSections);
+
+        // Export to PDF (simulated)
+        function exportToPDF() {
+            alert('Função de exportação para PDF em desenvolvimento. Envie um e-mail para mim e lhe envio o PDF');
+        }
+
+        // Print budget
+        function printBudget() {
+            window.print();
+        }
+
+        // Share budget
+        function shareBudget() {
+            let shareText = "Orçamento Citroën C4 Picasso 2010/2011 2.0 Automático:\n\n";
+            
+            Object.entries(budgetData).forEach(([key, section]) => {
+                const sectionTotal = section.items.reduce((sum, item) => sum + item.total, 0);
+                shareText += `${section.name}: ${formatCurrency(sectionTotal)}\n`;
+            });
+            
+            const totalCurrent = Object.values(budgetData).reduce((sum, section) => 
+                sum + section.items.reduce((itemSum, item) => itemSum + item.total, 0), 0);
+            
+            shareText += `\nTOTAL: ${formatCurrency(totalCurrent)}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Orçamento Citroën C4 Picasso',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Orçamento copiado para a área de transferência!');
+                });
+            }
+        }
+
+        // Modal functions
+        function showHelp() {
+            document.getElementById('helpModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('helpModal').style.display = 'none';
+        }
+
+        // Initialize the application
+        function init() {
+            loadSavedData();
+            renderSections();
+            
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                const modal = document.getElementById('helpModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+        }
+
+        // Initialize on page load
+        window.onload = init;
+    </script>
+</body>
+</html>
