@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orçamento Citroën C4 Picasso 2010/2011</title>
+    <title>Orçamento Citroën C4 Picasso 2011</title>
     <style>
         * {
             margin: 0;
@@ -403,6 +403,84 @@
             flex-wrap: wrap;
         }
 
+        .share-options {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .share-options.active {
+            display: block;
+        }
+
+        .share-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .share-overlay.active {
+            display: block;
+        }
+
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .share-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .share-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .share-btn.email {
+            background: #ea4335;
+            color: white;
+        }
+
+        .share-btn.copy {
+            background: #6c757d;
+            color: white;
+        }
+
+        .share-btn.telegram {
+            background: #0088cc;
+            color: white;
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -456,7 +534,7 @@
             <div class="car-info">
                 <div class="car-icon">🚗</div>
                 <div>
-                    <h2>Modelo: Citroën C4 Picasso 2010/2011 2.0 Automático Gasolina</h2>
+                    <h2>Modelo: Citroën C4 Picasso 2011 2.0 Automático Gasolina</h2>
                     <p>Use esta ferramenta para comparar preços e gerenciar seu orçamento</p>
                 </div>
             </div>
@@ -509,17 +587,57 @@
             <button class="btn btn-primary" onclick="printBudget()">
                 <i class="fas fa-print"></i> Imprimir
             </button>
-            <button class="btn btn-secondary" onclick="shareBudget()">
+            <button class="btn btn-secondary" onclick="showShareOptions()">
                 <i class="fas fa-share-alt"></i> Compartilhar
             </button>
         </div>
 
         <footer>
-            <p>Orçamento gerado para Citroën C4 Picasso 2010/2011 2.0 Automático Gasolina</p>
+            <p>Orçamento gerado para Citroën C4 Picasso 2011 2.0 Automático Gasolina</p>
             <p>Atualização automática conforme edições • Dados salvos localmente</p>
         </footer>
     </div>
 
+    <!-- Share Options Modal -->
+    <div class="share-overlay" id="shareOverlay" onclick="hideShareOptions()"></div>
+    <div class="share-options" id="shareOptions">
+        <h2 style="color: #003b5c; margin-bottom: 20px; text-align: center;">
+            <i class="fas fa-share-alt"></i> Compartilhar Orçamento
+        </h2>
+        <p style="margin-bottom: 20px; text-align: center;">Escolha como deseja compartilhar:</p>
+        
+        <div class="share-buttons">
+            <button class="share-btn whatsapp" onclick="shareViaWhatsApp()">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </button>
+            <button class="share-btn telegram" onclick="shareViaTelegram()">
+                <i class="fab fa-telegram"></i> Telegram
+            </button>
+            <button class="share-btn email" onclick="shareViaEmail()">
+                <i class="fas fa-envelope"></i> E-mail
+            </button>
+            <button class="share-btn copy" onclick="copyToClipboard()">
+                <i class="fas fa-copy"></i> Copiar
+            </button>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <label style="display: block; margin-bottom: 10px; font-weight: 600;">
+                <input type="checkbox" id="shareDetails" checked> Incluir todos os itens detalhados
+            </label>
+            <label style="display: block; margin-bottom: 10px; font-weight: 600;">
+                <input type="checkbox" id="shareTotals" checked> Incluir totais por seção
+            </label>
+        </div>
+        
+        <div style="text-align: center; margin-top: 25px;">
+            <button class="btn btn-secondary" onclick="hideShareOptions()">
+                <i class="fas fa-times"></i> Fechar
+            </button>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
     <div id="helpModal" class="modal">
         <div class="modal-content">
             <h2><i class="fas fa-question-circle"></i> Como usar</h2>
@@ -528,7 +646,8 @@
             <p>3. <strong>Remover itens:</strong> Clique no botão "Excluir"</p>
             <p>4. <strong>Buscar:</strong> Use a barra de busca para encontrar peças específicas</p>
             <p>5. <strong>Filtrar:</strong> Use o seletor para ver apenas um sistema</p>
-            <p>6. <strong>Salvar:</strong> Os dados são salvos automaticamente no seu navegador</p>
+            <p>6. <strong>Compartilhar:</strong> Clique em "Compartilhar" para enviar o orçamento completo</p>
+            <p>7. <strong>Salvar:</strong> Os dados são salvos automaticamente no seu navegador</p>
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="closeModal()">Entendi!</button>
             </div>
@@ -759,12 +878,124 @@
             document.getElementById('totalRange').textContent = `Faixa: ${formatCurrency(totalMin)} - ${formatCurrency(totalMax)}`;
         }
 
+        // Generate detailed text for sharing
+        function generateShareText(includeDetails = true, includeTotals = true) {
+            const currentDate = new Date().toLocaleDateString('pt-BR');
+            let text = `🚗 *ORÇAMENTO CITROËN C4 PICASSO 2011 2.0 AUT.*\n`;
+            text += `📅 ${currentDate}\n`;
+            text += `━━━━━━━━━━━━━━━━━━━━\n\n`;
+            
+            let grandTotal = 0;
+            let grandMin = 0;
+            let grandMax = 0;
+            
+            Object.entries(budgetData).forEach(([key, section]) => {
+                const sectionTotal = section.items.reduce((sum, item) => sum + item.total, 0);
+                grandTotal += sectionTotal;
+                grandMin += section.min;
+                grandMax += section.max;
+                
+                text += `*${section.name}*\n`;
+                
+                if (includeDetails) {
+                    section.items.forEach(item => {
+                        text += `• ${item.quantity}x ${item.name}: ${formatCurrency(item.unitPrice)} = ${formatCurrency(item.total)}\n`;
+                    });
+                }
+                
+                if (includeTotals) {
+                    text += `💰 *Total da seção:* ${formatCurrency(sectionTotal)}\n`;
+                    text += `📊 Faixa estimada: ${formatCurrency(section.min)} - ${formatCurrency(section.max)}\n`;
+                }
+                
+                text += `\n`;
+            });
+            
+            text += `━━━━━━━━━━━━━━━━━━━━\n`;
+            text += `*TOTAL GERAL:* ${formatCurrency(grandTotal)}\n`;
+            text += `*FAIXA ESTIMADA:* ${formatCurrency(grandMin)} - ${formatCurrency(grandMax)}\n\n`;
+            text += `⚠️ *Observações:*\n`;
+            text += `• Valores estimados APENAS para peças\n`;
+            text += `• Não inclui mão de obra\n`;
+            text += `• Preços podem variar conforme região e marca\n\n`;
+            text += `📱 Gerado pelo Orçamento C4 Picasso`;
+            
+            return text;
+        }
+
+        // Share via WhatsApp
+        function shareViaWhatsApp() {
+            const includeDetails = document.getElementById('shareDetails').checked;
+            const includeTotals = document.getElementById('shareTotals').checked;
+            const shareText = generateShareText(includeDetails, includeTotals);
+            
+            // WhatsApp API limits to 4096 characters
+            const encodedText = encodeURIComponent(shareText);
+            const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+            
+            window.open(whatsappUrl, '_blank');
+            hideShareOptions();
+        }
+
+        // Share via Telegram
+        function shareViaTelegram() {
+            const includeDetails = document.getElementById('shareDetails').checked;
+            const includeTotals = document.getElementById('shareTotals').checked;
+            const shareText = generateShareText(includeDetails, includeTotals);
+            
+            const encodedText = encodeURIComponent(shareText);
+            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodedText}`;
+            
+            window.open(telegramUrl, '_blank');
+            hideShareOptions();
+        }
+
+        // Share via Email
+        function shareViaEmail() {
+            const includeDetails = document.getElementById('shareDetails').checked;
+            const includeTotals = document.getElementById('shareTotals').checked;
+            const shareText = generateShareText(includeDetails, includeTotals);
+            
+            const subject = encodeURIComponent('Orçamento Citroën C4 Picasso 2011');
+            const body = encodeURIComponent(shareText + '\n\n---\nGerado em: ' + window.location.href);
+            const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
+            
+            window.location.href = mailtoUrl;
+            hideShareOptions();
+        }
+
+        // Copy to clipboard
+        function copyToClipboard() {
+            const includeDetails = document.getElementById('shareDetails').checked;
+            const includeTotals = document.getElementById('shareTotals').checked;
+            const shareText = generateShareText(includeDetails, includeTotals);
+            
+            navigator.clipboard.writeText(shareText).then(() => {
+                alert('Orçamento copiado para a área de transferência!');
+                hideShareOptions();
+            }).catch(err => {
+                console.error('Erro ao copiar: ', err);
+                alert('Erro ao copiar. Tente novamente.');
+            });
+        }
+
+        // Show share options
+        function showShareOptions() {
+            document.getElementById('shareOverlay').classList.add('active');
+            document.getElementById('shareOptions').classList.add('active');
+        }
+
+        // Hide share options
+        function hideShareOptions() {
+            document.getElementById('shareOverlay').classList.remove('active');
+            document.getElementById('shareOptions').classList.remove('active');
+        }
+
         // Start editing an item
         function startEdit(section, index) {
             editingItem = { section, index };
             renderSections();
             
-            // Focus on the name field
             setTimeout(() => {
                 const nameInput = document.getElementById('edit-name');
                 if (nameInput) nameInput.focus();
@@ -825,7 +1056,6 @@
                     total: calculateItemTotal(quantity, unitPrice)
                 });
                 
-                // Clear inputs
                 nameInput.value = '';
                 quantityInput.value = 1;
                 unitPriceInput.value = '';
@@ -833,7 +1063,6 @@
                 saveToLocalStorage();
                 renderSections();
                 
-                // Focus back on name input
                 nameInput.focus();
             } else {
                 alert('Por favor, preencha todos os campos corretamente.');
@@ -870,34 +1099,6 @@
             window.print();
         }
 
-        // Share budget
-        function shareBudget() {
-            let shareText = "Orçamento Citroën C4 Picasso 2010/2011 2.0 Automático:\n\n";
-            
-            Object.entries(budgetData).forEach(([key, section]) => {
-                const sectionTotal = section.items.reduce((sum, item) => sum + item.total, 0);
-                shareText += `${section.name}: ${formatCurrency(sectionTotal)}\n`;
-            });
-            
-            const totalCurrent = Object.values(budgetData).reduce((sum, section) => 
-                sum + section.items.reduce((itemSum, item) => itemSum + item.total, 0), 0);
-            
-            shareText += `\nTOTAL: ${formatCurrency(totalCurrent)}`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Orçamento Citroën C4 Picasso',
-                    text: shareText,
-                    url: window.location.href
-                });
-            } else {
-                // Fallback for browsers that don't support Web Share API
-                navigator.clipboard.writeText(shareText).then(() => {
-                    alert('Orçamento copiado para a área de transferência!');
-                });
-            }
-        }
-
         // Modal functions
         function showHelp() {
             document.getElementById('helpModal').style.display = 'flex';
@@ -912,7 +1113,6 @@
             loadSavedData();
             renderSections();
             
-            // Close modal when clicking outside
             window.onclick = function(event) {
                 const modal = document.getElementById('helpModal');
                 if (event.target === modal) {
